@@ -39,6 +39,7 @@ function todoToHTML({ id, completed, title }) {
             <div class="form-check" id="todo${id}">
           <label class="form-check-label">
             <input
+            onchange="toggleCompliteTodo(${id})"
              type="checkbox"
              class="form-check-input"
              ${completed && 'checked'}
@@ -66,4 +67,17 @@ async function deleteTodo(id) {
   if (data) {
     document.getElementById(`todo${id}`).remove();
   }
+}
+
+async function toggleCompliteTodo(id) {
+  const complited = document.querySelector(`#todo${id} input`).checked;
+  const res = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ complited }),
+  });
+
+  const data = await res.json();
+
+  console.log(data);
 }
